@@ -1,22 +1,40 @@
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GigaChat.SemanticKernel", "GigaChat.SemanticKernel.csproj", "{FDE010E5-D325-1C9B-ED92-34E052F5175F}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{827E0CD3-B72D-47B6-A68D-7590B98EB39B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GigaChat.SemanticKernel", "src\GigaChat.SemanticKernel.csproj", "{8FEE706C-87C6-469B-9AD3-0A12D8DEB30C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{FDE010E5-D325-1C9B-ED92-34E052F5175F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FDE010E5-D325-1C9B-ED92-34E052F5175F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FDE010E5-D325-1C9B-ED92-34E052F5175F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FDE010E5-D325-1C9B-ED92-34E052F5175F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FEE706C-87C6-469B-9AD3-0A12D8DEB30C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FEE706C-87C6-469B-9AD3-0A12D8DEB30C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FEE706C-87C6-469B-9AD3-0A12D8DEB30C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8FEE706C-87C6-469B-9AD3-0A12D8DEB30C}.Debug|x64.Build.0 = Debug|Any CPU
+		{8FEE706C-87C6-469B-9AD3-0A12D8DEB30C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8FEE706C-87C6-469B-9AD3-0A12D8DEB30C}.Debug|x86.Build.0 = Debug|Any CPU
+		{8FEE706C-87C6-469B-9AD3-0A12D8DEB30C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FEE706C-87C6-469B-9AD3-0A12D8DEB30C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FEE706C-87C6-469B-9AD3-0A12D8DEB30C}.Release|x64.ActiveCfg = Release|Any CPU
+		{8FEE706C-87C6-469B-9AD3-0A12D8DEB30C}.Release|x64.Build.0 = Release|Any CPU
+		{8FEE706C-87C6-469B-9AD3-0A12D8DEB30C}.Release|x86.ActiveCfg = Release|Any CPU
+		{8FEE706C-87C6-469B-9AD3-0A12D8DEB30C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8FEE706C-87C6-469B-9AD3-0A12D8DEB30C} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9D8EB392-F793-44F2-AFF5-C21CBCBC8F2E}
