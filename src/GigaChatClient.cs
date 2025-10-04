@@ -190,7 +190,16 @@ public sealed class GigaChatClient : IDisposable
         httpRequest.Content = new StringContent(json, Encoding.UTF8, "application/json");
 
         var response = await _httpClient.SendAsync(httpRequest, cancellationToken);
-        response.EnsureSuccessStatusCode();
+        
+        if (!response.IsSuccessStatusCode)
+        {
+            var errorContent = await response.Content.ReadAsStringAsync(cancellationToken);
+            throw new HttpRequestException(
+                $"GigaChat embeddings request failed with status {(int)response.StatusCode} ({response.ReasonPhrase}). " +
+                $"Input count: {request.Input.Count}. " +
+                $"Consider reducing batch size if you get 413 error. " +
+                $"Response: {errorContent}");
+        }
 
         var result = await response.Content.ReadFromJsonAsync<GigaChatEmbeddingsResponse>(cancellationToken: cancellationToken);
         if (result == null)

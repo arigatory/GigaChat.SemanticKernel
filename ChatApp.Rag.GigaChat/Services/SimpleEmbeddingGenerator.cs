@@ -10,7 +10,7 @@ public class SimpleEmbeddingGenerator : IEmbeddingGenerator<string, Embedding<fl
 {
     private readonly Random _random = new Random(42); // Fixed seed for consistency
 
-    public EmbeddingGeneratorMetadata Metadata => new EmbeddingGeneratorMetadata("SimpleEmbedding", null, 1536);
+    public EmbeddingGeneratorMetadata Metadata => new("SimpleEmbedding");
 
     public async Task<GeneratedEmbeddings<Embedding<float>>> GenerateAsync(
         IEnumerable<string> values,

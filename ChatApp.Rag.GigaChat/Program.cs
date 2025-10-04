@@ -2,8 +2,6 @@ using Microsoft.Extensions.AI;
 using ChatApp.Rag.GigaChat.Components;
 using ChatApp.Rag.GigaChat.Services;
 using ChatApp.Rag.GigaChat.Services.Ingestion;
-using GigaChat.SemanticKernel;
-using Microsoft.SemanticKernel;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();
@@ -15,19 +13,7 @@ builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 var gigaChatToken = builder.Configuration["GigaChat:Token"] 
     ?? throw new InvalidOperationException("Missing configuration: GigaChat:Token. Please set it using 'dotnet user-secrets set GigaChat:Token YOUR-TOKEN'");
 
-// Build Semantic Kernel with GigaChat
-var kernelBuilder = Kernel.CreateBuilder();
-kernelBuilder.AddGigaChatChatCompletion(
-    authorizationKey: gigaChatToken,
-    modelId: "GigaChat"  // Available models: GigaChat, GigaChat-Plus, GigaChat-Pro
-);
-var kernel = kernelBuilder.Build();
-
-// Get the chat completion service and wrap it for Microsoft.Extensions.AI
-var gigaChatService = kernel.GetRequiredService<Microsoft.SemanticKernel.ChatCompletion.IChatCompletionService>();
-var chatClient = new GigaChatAIChatClient(gigaChatService, "GigaChat");
-
-// Use GigaChat embeddings instead of OpenAI
+// Use GigaChat embeddings
 // Available models: "Embeddings" (default), "EmbeddingsGigaR" (advanced with larger context)
 var embeddingGenerator = new GigaChatEmbeddingGenerator(gigaChatToken, "Embeddings");
 
@@ -38,8 +24,18 @@ builder.Services.AddSqliteCollection<string, IngestedDocument>("data-chatapp_rag
 
 builder.Services.AddScoped<DataIngestor>();
 builder.Services.AddSingleton<SemanticSearch>();
-builder.Services.AddChatClient(chatClient).UseFunctionInvocation().UseLogging();
 builder.Services.AddEmbeddingGenerator(embeddingGenerator);
+
+// Register GigaChatAIChatClient as IChatClient with DI
+builder.Services.AddSingleton<IChatClient>(serviceProvider =>
+{
+    var logger = serviceProvider.GetRequiredService<ILogger<GigaChatAIChatClient>>();
+    return new GigaChatAIChatClient(
+        authData: gigaChatToken,
+        modelId: "GigaChat", // Available models: GigaChat, GigaChat-Plus, GigaChat-Pro
+        logger: logger
+    );
+});
 
 var app = builder.Build();
 

@@ -21,7 +21,10 @@ public class DataIngestor(
         await documentsCollection.EnsureCollectionExistsAsync();
 
         var sourceId = source.SourceId;
+        logger.LogInformation("Starting ingestion from source: {sourceId}", sourceId);
+        
         var documentsForSource = await documentsCollection.GetAsync(doc => doc.SourceId == sourceId, top: int.MaxValue).ToListAsync();
+        logger.LogInformation("Found {count} existing documents in source", documentsForSource.Count);
 
         var deletedDocuments = await source.GetDeletedDocumentsAsync(documentsForSource);
         foreach (var deletedDocument in deletedDocuments)
@@ -32,6 +35,8 @@ public class DataIngestor(
         }
 
         var modifiedDocuments = await source.GetNewOrModifiedDocumentsAsync(documentsForSource);
+        logger.LogInformation("Found {count} new or modified documents to process", modifiedDocuments.Count());
+        
         foreach (var modifiedDocument in modifiedDocuments)
         {
             logger.LogInformation("Processing {documentId}", modifiedDocument.DocumentId);
@@ -40,7 +45,11 @@ public class DataIngestor(
             await documentsCollection.UpsertAsync(modifiedDocument);
 
             var newRecords = await source.CreateChunksForDocumentAsync(modifiedDocument);
-            await chunksCollection.UpsertAsync(newRecords);
+            var recordsList = newRecords.ToList();
+            logger.LogInformation("Created {count} chunks for {documentId}", recordsList.Count, modifiedDocument.DocumentId);
+            
+            await chunksCollection.UpsertAsync(recordsList);
+            logger.LogInformation("Successfully indexed {count} chunks for {documentId}", recordsList.Count, modifiedDocument.DocumentId);
         }
 
         logger.LogInformation("Ingestion is up-to-date");
@@ -51,6 +60,7 @@ public class DataIngestor(
             var chunksToDelete = await chunksCollection.GetAsync(record => record.DocumentId == documentId, int.MaxValue).ToListAsync();
             if (chunksToDelete.Any())
             {
+                logger.LogInformation("Deleting {count} old chunks for {documentId}", chunksToDelete.Count, documentId);
                 await chunksCollection.DeleteAsync(chunksToDelete.Select(r => r.Key));
             }
         }

@@ -1,3 +1,4 @@
+using System;
 using System.Net.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.SemanticKernel;
@@ -77,6 +78,7 @@ public static class GigaChatKernelExtensions
 
     /// <summary>
     /// Adds GigaChat text embedding generation service to the kernel.
+    /// This method is deprecated. Use Microsoft.Extensions.AI.IEmbeddingGenerator instead.
     /// </summary>
     /// <param name="builder">The kernel builder.</param>
     /// <param name="authorizationKey">The GigaChat authorization key.</param>
@@ -86,6 +88,8 @@ public static class GigaChatKernelExtensions
     /// <param name="serviceId">Optional service ID for keyed services.</param>
     /// <returns>The kernel builder.</returns>
 #pragma warning disable SKEXP0001 // ITextEmbeddingGenerationService is experimental
+#pragma warning disable CS0618 // Type or member is obsolete
+    [Obsolete("Use Microsoft.Extensions.AI.IEmbeddingGenerator<string, Embedding<float>> instead. This will be removed in a future version.")]
     public static IKernelBuilder AddGigaChatTextEmbeddingGeneration(
         this IKernelBuilder builder,
         string authorizationKey,
@@ -107,6 +111,7 @@ public static class GigaChatKernelExtensions
         
         return builder;
     }
+#pragma warning restore CS0618
 #pragma warning restore SKEXP0001
 
     /// <summary>

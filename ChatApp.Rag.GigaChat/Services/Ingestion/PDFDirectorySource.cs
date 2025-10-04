@@ -64,7 +64,9 @@ public class PDFDirectorySource(string sourceDirectory) : IIngestionSource
             textBlocks.Select(t => t.Text.ReplaceLineEndings(" ")));
 
 #pragma warning disable SKEXP0050 // Type is for evaluation purposes only
-        return TextChunker.SplitPlainTextParagraphs([pageText], 200)
+        // GigaChat has a limit of 514 tokens per text for embeddings
+        // Using 100 tokens per chunk to stay well under the limit (with margin for tokenization differences)
+        return TextChunker.SplitPlainTextParagraphs([pageText], maxTokensPerParagraph: 100)
             .Select((text, index) => (pdfPage.Number, index, text));
 #pragma warning restore SKEXP0050 // Type is for evaluation purposes only
     }
