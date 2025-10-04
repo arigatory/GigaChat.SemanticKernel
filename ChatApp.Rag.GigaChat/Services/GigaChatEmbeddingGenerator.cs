@@ -1,5 +1,6 @@
 using Microsoft.Extensions.AI;
 using GigaChat.SemanticKernel.Models;
+using GigaChatClient = global::GigaChat.SemanticKernel.GigaChatClient;
 
 namespace ChatApp.Rag.GigaChat.Services;
 
@@ -8,20 +9,16 @@ namespace ChatApp.Rag.GigaChat.Services;
 /// </summary>
 public sealed class GigaChatEmbeddingGenerator : IEmbeddingGenerator<string, Embedding<float>>
 {
-    private readonly GigaChat.SemanticKernel.GigaChatClient _client;
+    private readonly GigaChatClient _client;
     private readonly string _modelId;
 
     public GigaChatEmbeddingGenerator(string authorizationKey, string modelId = "Embeddings")
     {
-        _client = new GigaChat.SemanticKernel.GigaChatClient(authorizationKey, modelId);
+        _client = new GigaChatClient(authorizationKey, modelId);
         _modelId = modelId;
     }
 
-    public EmbeddingGeneratorMetadata Metadata => new EmbeddingGeneratorMetadata(
-        "GigaChat", 
-        _modelId, 
-        1024  // GigaChat Embeddings dimension is 1024
-    );
+    public EmbeddingGeneratorMetadata Metadata => new("GigaChat");
 
     public async Task<GeneratedEmbeddings<Embedding<float>>> GenerateAsync(
         IEnumerable<string> values,

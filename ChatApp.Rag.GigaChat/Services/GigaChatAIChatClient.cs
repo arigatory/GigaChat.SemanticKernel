@@ -2,6 +2,7 @@ using Microsoft.Extensions.AI;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 using System.Runtime.CompilerServices;
+using AITextContent = Microsoft.Extensions.AI.TextContent;
 
 namespace ChatApp.Rag.GigaChat.Services;
 
@@ -19,7 +20,7 @@ public sealed class GigaChatAIChatClient : IChatClient
         _modelId = modelId;
     }
 
-    public ChatClientMetadata Metadata => new ChatClientMetadata(providerName: "GigaChat", modelId: _modelId);
+    public ChatClientMetadata Metadata => new("GigaChat");
 
     public async Task<ChatResponse> GetResponseAsync(
         IEnumerable<ChatMessage> chatMessages,
@@ -40,13 +41,15 @@ public sealed class GigaChatAIChatClient : IChatClient
             throw new InvalidOperationException("No response from GigaChat");
         }
 
-        return new ChatResponse(new[]
+        return new ChatResponse([
+            new ChatMessage(ChatRole.Assistant, [new AITextContent(message.Content)])
+        ])
         {
-            new ChatMessage(ChatRole.Assistant, message.Content)
-        });
+            ModelId = _modelId
+        };
     }
 
-    public async IAsyncEnumerable<StreamingChatResponseUpdate> GetStreamingResponseAsync(
+    public async IAsyncEnumerable<ChatResponseUpdate> GetStreamingResponseAsync(
         IEnumerable<ChatMessage> chatMessages,
         ChatOptions? options = null,
         [EnumeratorCancellation] CancellationToken cancellationToken = default)
@@ -59,11 +62,14 @@ public sealed class GigaChatAIChatClient : IChatClient
             settings,
             cancellationToken: cancellationToken))
         {
-            yield return new StreamingChatResponseUpdate
+            if (!string.IsNullOrEmpty(item.Content))
             {
-                Role = ChatRole.Assistant,
-                Text = item.Content
-            };
+                yield return new ChatResponseUpdate
+                {
+                    Role = ChatRole.Assistant,
+                    Contents = [new AITextContent(item.Content)]
+                };
+            }
         }
     }
 
@@ -96,7 +102,7 @@ public sealed class GigaChatAIChatClient : IChatClient
                 _ => AuthorRole.User
             };
 
-            var content = string.Join("", message.Contents.OfType<TextContent>().Select(c => c.Text));
+            var content = string.Join("", message.Contents.OfType<AITextContent>().Select(c => c.Text));
             history.AddMessage(role, content);
         }
 
