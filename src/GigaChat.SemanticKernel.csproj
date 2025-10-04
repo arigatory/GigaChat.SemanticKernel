@@ -2,14 +2,14 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <PackageId>GigaChat.SemanticKernel</PackageId>
-    <Version>1.1.0</Version>
+    <Version>1.2.0</Version>
     <Authors>Ivan Panchenko</Authors>
-    <Description>GigaChat integration for Semantic Kernel - supports chat completions, streaming, and embeddings with OAuth 2.0 authentication</Description>
+    <Description>GigaChat integration for Semantic Kernel - supports chat completions, streaming, embeddings, and Function Calling with OAuth 2.0 authentication</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/arigatory/gigachat-semantickernel</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arigatory/gigachat-semantickernel</RepositoryUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageReleaseNotes>v1.1.0: Updated to Microsoft.SemanticKernel 1.61.0</PackageReleaseNotes>
+    <PackageReleaseNotes>v1.2.0: Added support for GigaChat Function Calling API, improved error handling for embeddings (413 errors), reduced chunk sizes for better compatibility</PackageReleaseNotes>
     <UserSecretsId>b3c3dbdb-fcac-4a8c-a9c9-8babb611e1d4</UserSecretsId>
   </PropertyGroup>
 
