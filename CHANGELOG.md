@@ -1,17 +1,40 @@
 # Changelog
 
-## [Unreleased]
+## [1.2.0] - 2025-10-04
+
+### Added
+
+- **Полная поддержка GigaChat Function Calling API** для RAG и агентов
+- Реализован `GigaChatAIChatClient` с циклом обработки function calls (максимум 5 вызовов)
+- Добавлена конвертация `AITool` в `AIFunction` для совместимости с Microsoft.Extensions.AI
+- Демо приложение `ChatApp.Rag.GigaChat` теперь использует Function Calling для семантического поиска
 
 ### Fixed
 
-- **Исправлена ошибка 413 (Request Entity Too Large)** при создании embeddings для больших объемов данных
-- Добавлен автоматический батчинг (разбиение на части) для запросов embeddings с лимитом 100 элементов на запрос
+- **Исправлена ошибка 413 (Request Entity Too Large)** при создании embeddings:
+  - Добавлен автоматический батчинг с лимитом 100 элементов на запрос
+  - Добавлена обрезка текстов до 500 токенов (~2000 символов)
+  - Уменьшен размер чанков PDF с 200 до 100 токенов
 - Улучшена обработка ошибок в `GigaChatClient.CreateEmbeddingsAsync` с более информативными сообщениями
+- Исправлена работа RAG - теперь GigaChat использует документы через Function Calling вместо общих знаний
+
+### Changed
+
+- `GigaChatAIChatClient` теперь работает напрямую с GigaChat API без Semantic Kernel в runtime
+- Добавлено подробное логирование function calls для отладки
+- Упрощён `Program.cs` - убрана зависимость от Semantic Kernel Kernel
 
 ### Deprecated
 
 - `GigaChatTextEmbeddingGenerationService` помечен как устаревший - рекомендуется использовать `Microsoft.Extensions.AI.IEmbeddingGenerator`
 - `AddGigaChatTextEmbeddingGeneration` помечен как устаревший - рекомендуется использовать новый API
+
+### Documentation
+
+- Добавлен `FUNCTION_CALLING_FIX.md` с подробным описанием реализации Function Calling
+- Обновлён `FIX_413_ERROR.md` с трёхуровневой защитой от ошибок
+
+## [Unreleased]
 
 ## [1.1.0] - 2025-10-04
 
