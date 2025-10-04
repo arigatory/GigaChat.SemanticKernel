@@ -9,6 +9,7 @@
     <PackageProjectUrl>https://github.com/arigatory/gigachat-semantickernel</PackageProjectUrl>
     <RepositoryUrl>https://github.com/arigatory/gigachat-semantickernel</RepositoryUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <UserSecretsId>b3c3dbdb-fcac-4a8c-a9c9-8babb611e1d4</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
